@@ -1,0 +1,8 @@
+{% extends "layout.html" %}
+{% block content %}
+    {% for article in articles %}
+        <h2>{{ article.ticker_id }}</h2>
+        <h3>{{ article.title }}</h3>
+        <p>{{ article.url }}</p>
+    {% endfor %}
+{% endblock content %}
