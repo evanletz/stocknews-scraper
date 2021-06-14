@@ -33,7 +33,6 @@ class Ticker(db.Model):
     )
     articles = db.relationship('Article', backref=db.backref('ticker'))
 
-
     def __repr__(self):
         return f'Ticker object <{self.ticker_id}>'
 
