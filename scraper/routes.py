@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, url_for
-from scraper import app
-from scraper.models import Article
+from scraper import app, db, bcrypt
+from scraper.models import User, Article
 from scraper.forms import RegistrationForm, LoginForm
 
 
@@ -13,8 +13,12 @@ def home():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
+        pw_hash = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user = User(username=form.username.data, email=form.email.data, phone=form.phone.data, password=pw_hash)
+        db.session.add(user)
+        db.session.commit()
         flash(f'Account successfully created for {form.username.data}!', category='success')
-        return redirect(url_for('home'))
+        return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
 @app.route('/login', methods=['GET','POST'])
