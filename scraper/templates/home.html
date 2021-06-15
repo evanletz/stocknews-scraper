@@ -1,8 +1,14 @@
 {% extends "layout.html" %}
 {% block content %}
     {% for article in articles %}
-        <h2>{{ article.ticker_id }}</h2>
-        <h3>{{ article.title }}</h3>
-        <p>{{ article.url }}</p>
+        <article class="media content-section">
+            <div class="media-body">
+                <div class="article-metadata">
+                    <p class="mr-2">{{ article.ticker_id }}</p>
+                </div>
+                <h2><a class="article-title" href="#">{{ article.title }}</a></h2>
+                <a class="article-content" href="#">{{ article.url }}</a>
+            </div>
+          </article>
     {% endfor %}
 {% endblock content %}
