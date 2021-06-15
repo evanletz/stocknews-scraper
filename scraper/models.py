@@ -15,7 +15,7 @@ class User(db.Model):
     password = db.Column(db.String(60), nullable=False)
     first_name = db.Column(db.String(15))
     last_name = db.Column(db.String(25))
-    phone = db.Column(db.Integer(10), nullable=False)
+    phone = db.Column(db.Integer, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     active = db.Column(db.Boolean, default=True)
     tickers = db.relationship(
@@ -28,7 +28,7 @@ class User(db.Model):
 class Ticker(db.Model):
     __tablename__ = 'ticker'
     ticker_id = db.Column(db.String, primary_key=True)
-    company_name = db.Column(db.String)
+    company_name = db.Column(db.String(50))
     active = db.Column(db.Boolean, default=True)
     users = db.relationship(
         'User', secondary=user_ticker, back_populates='tickers'
