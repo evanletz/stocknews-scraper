@@ -2,34 +2,34 @@ from datetime import datetime
 from scraper import db
 
 
-contact_ticker = db.Table(
-    'contact_ticker',
-    db.Column('contact_id', db.Integer, db.ForeignKey('contact.contact_id'), primary_key=True),
+user_ticker = db.Table(
+    'user_ticker',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.user_id'), primary_key=True),
     db.Column('ticker_id', db.String, db.ForeignKey('ticker.ticker_id'), primary_key=True)
 )
 
-class Contact(db.Model):
-    __tablename__ = 'contact'
-    contact_id = db.Column(db.Integer, primary_key=True)
+class User(db.Model):
+    __tablename__ = 'user'
+    user_id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String)
     last_name = db.Column(db.String)
     phone = db.Column(db.Integer, nullable=False)
     email = db.Column(db.String)
     active = db.Column(db.Boolean)
     tickers = db.relationship(
-        'Ticker', secondary=contact_ticker, back_populates='contacts'
+        'Ticker', secondary=user_ticker, back_populates='users'
     )
 
     def __repr__(self):
-        return f'Contact object <{self.contact_id}>'
+        return f'User object <{self.user_id}>'
 
 class Ticker(db.Model):
     __tablename__ = 'ticker'
     ticker_id = db.Column(db.String, primary_key=True)
     company_name = db.Column(db.String)
     active = db.Column(db.Boolean, default=True)
-    contacts = db.relationship(
-        'Contact', secondary=contact_ticker, back_populates='tickers'
+    users = db.relationship(
+        'User', secondary=user_ticker, back_populates='tickers'
     )
     articles = db.relationship('Article', backref=db.backref('ticker'))
 
