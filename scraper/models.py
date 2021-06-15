@@ -11,11 +11,13 @@ user_ticker = db.Table(
 class User(db.Model):
     __tablename__ = 'user'
     user_id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String)
-    last_name = db.Column(db.String)
-    phone = db.Column(db.Integer, nullable=False)
-    email = db.Column(db.String)
-    active = db.Column(db.Boolean)
+    username = db.Column(db.String(15), unique=True, nullable=False)
+    password = db.Column(db.String(60), nullable=False)
+    first_name = db.Column(db.String(15))
+    last_name = db.Column(db.String(25))
+    phone = db.Column(db.Integer(10), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    active = db.Column(db.Boolean, default=True)
     tickers = db.relationship(
         'Ticker', secondary=user_ticker, back_populates='users'
     )
