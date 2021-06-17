@@ -1,4 +1,5 @@
 from flask import render_template, flash, redirect, url_for
+from flask_login import login_user
 from scraper import app, db, bcrypt
 from scraper.models import User, Article
 from scraper.forms import RegistrationForm, LoginForm
@@ -25,9 +26,10 @@ def register():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        if form.email.data == 'evanletz@gmail.com' and form.password.data == 'password':
-            flash(f'Successfully logged in!', category='success')
+        user = User.query.filter_by(email=form.email.data).first()
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            login_user(user, remember=form.remember.data)
             return redirect(url_for('home'))
         else:
-            flash('Incorrect username and/or password. Try again.', category='danger')
+            flash('Incorrect email and/or password. Try again.', category='danger')
     return render_template('login.html', title='Login', form=form)

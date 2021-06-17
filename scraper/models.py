@@ -1,5 +1,6 @@
 from datetime import datetime
-from scraper import db
+from flask_login import UserMixin
+from scraper import db, login_manager
 
 
 user_ticker = db.Table(
@@ -8,7 +9,11 @@ user_ticker = db.Table(
     db.Column('ticker_id', db.String, db.ForeignKey('ticker.ticker_id'), primary_key=True)
 )
 
-class User(db.Model):
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+class User(db.Model, UserMixin):
     __tablename__ = 'user'
     user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(15), unique=True, nullable=False)
@@ -24,6 +29,9 @@ class User(db.Model):
 
     def __repr__(self):
         return f'User object <{self.user_id}>'
+
+    def get_id(self):
+        return self.user_id
 
 class Ticker(db.Model):
     __tablename__ = 'ticker'
