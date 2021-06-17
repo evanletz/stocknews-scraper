@@ -1,5 +1,5 @@
 from flask import render_template, flash, redirect, url_for
-from flask_login import login_user, logout_user, current_user
+from flask_login import login_user, logout_user, current_user, login_required
 from scraper import app, db, bcrypt
 from scraper.models import User, Article
 from scraper.forms import RegistrationForm, LoginForm
@@ -42,3 +42,8 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('home'))
+
+@app.route('/account')
+@login_required
+def account():
+    return render_template('account.html', title='Account')
