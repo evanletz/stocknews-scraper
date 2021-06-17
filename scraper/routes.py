@@ -30,12 +30,12 @@ def login():
         return redirect(url_for('home'))
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+        user = User.query.filter_by(username=form.username.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
             return redirect(url_for('home'))
         else:
-            flash('Incorrect email and/or password. Try again.', category='danger')
+            flash('Incorrect username and/or password. Try again.', category='danger')
     return render_template('login.html', title='Login', form=form)
 
 @app.route('/logout')
