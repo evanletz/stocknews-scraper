@@ -1,5 +1,7 @@
+import os
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import login_user, logout_user, current_user, login_required
+import secrets
 from scraper import app, db, bcrypt
 from scraper.models import User, Article
 from scraper.forms import RegistrationForm, LoginForm, UpdateAccountForm
@@ -45,11 +47,22 @@ def logout():
     flash('You have been successfully logged out!', category='success')
     return redirect(url_for('home'))
 
+def save_photo(form_photo):
+    random_hex = secrets.token_hex(8)
+    _, file_ext = os.path.splitext(form_photo.filename)
+    filename = random_hex + file_ext
+    filepath = os.path.join(app.root_path, 'static', 'profile_pics', filename)
+    form_photo.save(filepath)
+    return filename
+
 @app.route('/account', methods=['GET','POST'])
 @login_required
 def account():
     form = UpdateAccountForm()
     if form.validate_on_submit():
+        if form.photo.data:
+            photo = save_photo(form.photo.data)
+            current_user.image_file = photo
         current_user.username = form.username.data
         current_user.email = form.email.data
         current_user.phone = form.phone.data
@@ -60,5 +73,6 @@ def account():
         form.username.data = current_user.username
         form.email.data = current_user.email
         form.phone.data = current_user.phone
+        form.photo.data = current_user.image_file
     image_file = url_for('static', filename=f'profile_pics/{current_user.image_file}')
     return render_template('account.html', title='Account', image_file=image_file, form=form)
