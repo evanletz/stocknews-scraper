@@ -130,3 +130,6 @@ dmypy.json
 
 # Old files
 archive/
+
+# Image Files
+profile_pics/
