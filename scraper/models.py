@@ -19,8 +19,6 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(15), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
     image_file = db.Column(db.String(50), nullable=False, default='default.jpeg')
-    first_name = db.Column(db.String(15))
-    last_name = db.Column(db.String(25))
     phone = db.Column(db.Integer, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     active = db.Column(db.Boolean, default=True)
@@ -29,7 +27,7 @@ class User(db.Model, UserMixin):
     )
 
     def __repr__(self):
-        return f'User object <{self.user_id}>'
+        return f'User object <{self.username}>'
 
     def get_id(self):
         return self.user_id
