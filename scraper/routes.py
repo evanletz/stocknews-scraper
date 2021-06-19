@@ -48,6 +48,11 @@ def logout():
     flash('You have been successfully logged out!', category='success')
     return redirect(url_for('home'))
 
+@app.route('/account/')
+def account():
+    image_file = url_for('static', filename=f'profile_pics/{current_user.image_file}')
+    return render_template('account.html', title='Account', image_file=image_file)
+
 def save_photo(form_photo):
     random_hex = secrets.token_hex(8)
     _, file_ext = os.path.splitext(form_photo.filename)
@@ -59,9 +64,9 @@ def save_photo(form_photo):
     img.save(filepath)
     return filename
 
-@app.route('/account', methods=['GET','POST'])
+@app.route('/account/update/', methods=['GET','POST'])
 @login_required
-def account():
+def update_account():
     form = UpdateAccountForm()
     if form.validate_on_submit():
         if form.photo.data:
@@ -74,11 +79,11 @@ def account():
         current_user.phone = form.phone.data
         db.session.commit()
         flash('Your account was successfully updated!', category='success')
-        redirect(url_for('account'))
+        redirect(url_for('update_account'))
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
         form.phone.data = current_user.phone
         form.photo.data = current_user.image_file
     image_file = url_for('static', filename=f'profile_pics/{current_user.image_file}')
-    return render_template('account.html', title='Account', image_file=image_file, form=form)
+    return render_template('update_account.html', title='Update Account', image_file=image_file, form=form)
