@@ -133,3 +133,6 @@ archive/
 
 # Image Files
 profile_pics/
+
+# Hidden Files
+.DS_Store
