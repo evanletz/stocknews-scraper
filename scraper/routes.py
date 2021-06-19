@@ -2,7 +2,7 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import login_user, logout_user, current_user, login_required
 from scraper import app, db, bcrypt
 from scraper.models import User, Article
-from scraper.forms import RegistrationForm, LoginForm
+from scraper.forms import RegistrationForm, LoginForm, UpdateAccountForm
 
 
 @app.route('/')
@@ -44,8 +44,20 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
-@app.route('/account')
+@app.route('/account', methods=['GET','POST'])
 @login_required
 def account():
+    form = UpdateAccountForm()
+    if form.validate_on_submit():
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+        current_user.phone = form.phone.data
+        db.session.commit()
+        flash('Your account was successfully updated!', category='success')
+        redirect(url_for('account'))
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+        form.email.data = current_user.email
+        form.phone.data = current_user.phone
     image_file = url_for('static', filename=f'profile_pics/{current_user.image_file}')
-    return render_template('account.html', title='Account', image_file=image_file)
+    return render_template('account.html', title='Account', image_file=image_file, form=form)
