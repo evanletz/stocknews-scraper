@@ -9,11 +9,11 @@ from scraper.forms import RegistrationForm, LoginForm, UpdateAccountForm
 
 
 @app.route('/')
-@app.route('/home')
+@app.route('/home/')
 def home():
     return render_template('home.html', articles=Article.query.all())
 
-@app.route('/register', methods=['GET','POST'])
+@app.route('/register/', methods=['GET','POST'])
 def register():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
@@ -27,7 +27,7 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
-@app.route('/login', methods=['GET','POST'])
+@app.route('/login/', methods=['GET','POST'])
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
@@ -42,7 +42,7 @@ def login():
             flash('Incorrect username and/or password. Try again.', category='danger')
     return render_template('login.html', title='Login', form=form)
 
-@app.route('/logout')
+@app.route('/logout/')
 def logout():
     logout_user()
     flash('You have been successfully logged out!', category='success')
