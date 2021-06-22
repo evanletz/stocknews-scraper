@@ -38,6 +38,19 @@ def compare_tickers_table(ticker_list):
     tickers_to_add = [ticker for ticker in ticker_list if ticker[0] in to_add]
     return symbols_to_delete, tickers_to_add
 
+def update_tickers_table(to_delete, to_add):
+    '''
+    Delete old tickers and add new tickers to the Ticker table.
+    '''
+    for delete_ticker in to_delete:
+        Ticker.query.filter_by(ticker_id=symbol).delete()
+    for add_ticker in to_add:
+        symbol = add_ticker[0]
+        company_name = add_ticker[1]
+        ticker = Ticker(ticker_id=symbol, company_name=company_name)
+        db.session.add(ticker)
+    db.session.commit()
+
     
 if __name__ == '__main__':
     pass
