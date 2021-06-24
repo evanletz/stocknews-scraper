@@ -35,7 +35,7 @@ def compare_tickers_table(ticker_list):
 
     symbols_to_delete = list(set(original_symbols) - set(symbol_list))
     symbols_to_add = list(set(symbol_list) - set(original_symbols))
-    tickers_to_add = [ticker for ticker in ticker_list if ticker[0] in to_add]
+    tickers_to_add = [ticker for ticker in ticker_list if ticker[0] in symbols_to_add]
     return symbols_to_delete, tickers_to_add
 
 def update_tickers_table(to_delete, to_add):
@@ -43,7 +43,7 @@ def update_tickers_table(to_delete, to_add):
     Delete old tickers and add new tickers to the Ticker table.
     '''
     for delete_ticker in to_delete:
-        Ticker.query.filter_by(ticker_id=symbol).delete()
+        Ticker.query.filter_by(ticker_id=delete_ticker).delete()
     for add_ticker in to_add:
         symbol = add_ticker[0]
         company_name = add_ticker[1]
