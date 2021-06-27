@@ -10,28 +10,42 @@
         </div>
     </div>
     <div class="content-section">
-        <form method='POST' action='' enctype='multipart/form-data'>
+        <form method="POST" action="" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
-            <fieldset class='form-group'>
-                <legend class='border-bottom mb-4'>Add Ticker</legend>
-                <div class='row'>
-                    <div class='col'>
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Add Ticker</legend>
+                <div class="row">
+                    <div class="col">
                         {% if form.ticker.errors %}
-                        {{ form.ticker(class='form-control form-control-lg is-invalid') }}
-                        <div class='invalid-feedback'>
+                        {{ form.ticker(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
                             {% for error in form.ticker.errors %}
                                 <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                         {% else %}
-                            {{ form.ticker(class='form-control form-control-lg') }}
+                            {{ form.ticker(class="form-control form-control-lg") }}
                         {% endif %}
                     </div>
-                    <div class='col'>
-                        {{ form.submit(class='btn btn-outline-info') }}
+                    <div class="col">
+                        {{ form.submit(class="btn btn-outline-info") }}
                     </div>
                 </div>
             </fieldset>
         </form>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            {% for row in current_user.tickers %}
+                <div class="card col-sm-4">
+                    <form class="card-body" method="POST" action="" enctype="multipart/form-data">
+                        <h5 class="card-title">{{ row.ticker_id }}</h5>
+                        <input type="hidden" name="ticker_id" value="{{ row.ticker_id }}">
+                        <p class="card-text">{{ row.company_name }}</p>
+                        <button type="submit" class="btn btn-danger">Remove</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 {% endblock content %}
