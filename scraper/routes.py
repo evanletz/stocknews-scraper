@@ -4,8 +4,8 @@ from flask_login import login_user, logout_user, current_user, login_required
 import secrets
 from PIL import Image
 from scraper import app, db, bcrypt
-from scraper.models import User, Article
-from scraper.forms import RegistrationForm, LoginForm, UpdateAccountForm
+from scraper.models import User, Article, Ticker
+from scraper.forms import RegistrationForm, LoginForm, UpdateAccountForm, AddTicker
 
 
 @app.route('/')
@@ -48,10 +48,17 @@ def logout():
     flash('You have been successfully logged out!', category='success')
     return redirect(url_for('home'))
 
-@app.route('/account/')
+@app.route('/account/', methods=['GET','POST'])
 def account():
     image_file = url_for('static', filename=f'profile_pics/{current_user.image_file}')
-    return render_template('account.html', title='Account', image_file=image_file)
+    form = AddTicker()
+    if form.validate_on_submit():
+        ticker = Ticker.query.filter_by(ticker_id=form.ticker.data).first()
+        current_user.tickers.append(ticker)
+        db.session.commit()
+        flash('Ticker successfully added to your watchlist!', category='success')
+        return redirect(url_for('account'))
+    return render_template('account.html', title='Account', image_file=image_file, form=form)
 
 def save_photo(form_photo):
     random_hex = secrets.token_hex(8)

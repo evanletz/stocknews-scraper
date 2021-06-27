@@ -4,7 +4,7 @@ from flask_login import current_user
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 import phonenumbers
-from scraper.models import User
+from scraper.models import User, Ticker
 
 
 class RegistrationForm(FlaskForm):
@@ -62,3 +62,13 @@ class UpdateAccountForm(FlaskForm):
         parsed_phone = phonenumbers.parse(phone.data, 'US')
         if not phonenumbers.is_valid_number(parsed_phone):
             raise ValidationError('Invalid phone number. Try retyping without symbols.')
+
+class AddTicker(FlaskForm):
+
+    ticker = StringField('Ticker', validators=[DataRequired(), Length(min=3, max=5)])
+    submit = SubmitField('Add')
+
+    def validate_ticker(self, ticker):
+        db_ticker = Ticker.query.filter_by(ticker_id=ticker.data.upper()).first()
+        if db_ticker is None:
+            raise ValidationError('Ticker is invalid or cannot be found. Please choose a different one.')
