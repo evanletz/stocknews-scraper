@@ -65,7 +65,7 @@ class UpdateAccountForm(FlaskForm):
 
 class AddTicker(FlaskForm):
 
-    ticker = StringField('Ticker', validators=[DataRequired(), Length(min=3, max=5)])
+    ticker = StringField('Ticker', validators=[DataRequired(), Length(min=1, max=5)])
     submit = SubmitField('Add')
 
     def validate_ticker(self, ticker):
