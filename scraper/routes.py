@@ -66,7 +66,7 @@ def account():
         flash('Ticker successfully removed from your watchlist!', category='success')
         return redirect(url_for('account'))
     elif form.validate_on_submit():
-        ticker = Ticker.query.filter_by(ticker_id=form.ticker.data).first()
+        ticker = Ticker.query.filter_by(ticker_id=form.ticker.data.upper()).first()
         current_user.tickers.append(ticker)
         db.session.commit()
         flash('Ticker successfully added to your watchlist!', category='success')
