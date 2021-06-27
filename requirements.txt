@@ -21,6 +21,7 @@ phonenumbers==8.12.24
 Pillow==8.2.0
 pycparser==2.20
 requests==2.25.1
+schedule==1.1.0
 six==1.16.0
 soupsieve==2.2.1
 SQLAlchemy==1.4.18
