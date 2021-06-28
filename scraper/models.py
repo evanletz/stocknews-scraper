@@ -1,5 +1,6 @@
 from datetime import datetime
 from flask_login import UserMixin
+from sqlalchemy.sql import func
 from scraper import db, login_manager
 
 
@@ -51,7 +52,6 @@ class Article(db.Model):
     ticker_id = db.Column(db.String, db.ForeignKey('ticker.ticker_id'))
     title = db.Column(db.String)
     url = db.Column(db.String)
-    datetime_found = db.Column(db.DateTime, default=datetime.now())
 
     def __repr__(self):
         return f'Article object <{self.article_id}>'
