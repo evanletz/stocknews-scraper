@@ -53,6 +53,9 @@ def update_tickers_table(to_delete, to_add):
     db.session.commit()
 
 def get_all_articles():
+    '''
+    Get all articles found for the current user's watchlist.
+    '''
     result = []
     for ticker in current_user.tickers:
         for article in ticker.articles:
