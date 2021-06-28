@@ -1,6 +1,7 @@
 import re
 import requests
 from bs4 import BeautifulSoup
+from flask_login import current_user
 from scraper import db
 from scraper.models import Ticker
 
@@ -50,6 +51,14 @@ def update_tickers_table(to_delete, to_add):
         ticker = Ticker(ticker_id=symbol, company_name=company_name)
         db.session.add(ticker)
     db.session.commit()
+
+def get_all_articles():
+    result = []
+    for ticker in current_user.tickers:
+        for article in ticker.articles:
+            result.append(article)
+    result_sorted = sorted(result, key=lambda x: x.article_id, reverse=True)
+    return result_sorted
 
     
 if __name__ == '__main__':
