@@ -6,15 +6,7 @@ from PIL import Image
 from scraper import app, db, bcrypt
 from scraper.models import User, Article, Ticker
 from scraper.forms import RegistrationForm, LoginForm, UpdateAccountForm, AddTicker
-
-
-def get_all_articles():
-    result = []
-    for ticker in current_user.tickers:
-        for article in ticker.articles:
-            result.append(article)
-    result_sorted = sorted(result, key=lambda x: x.article_id, reverse=True)
-    return result_sorted
+from scraper.utils import get_all_articles
 
 @app.route('/')
 @app.route('/home/')
