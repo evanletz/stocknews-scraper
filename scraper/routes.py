@@ -8,10 +8,19 @@ from scraper.models import User, Article, Ticker
 from scraper.forms import RegistrationForm, LoginForm, UpdateAccountForm, AddTicker
 
 
+def get_all_articles():
+    result = []
+    for ticker in current_user.tickers:
+        for article in ticker.articles:
+            result.append(article)
+    result_sorted = sorted(result, key=lambda x: x.article_id, reverse=True)
+    return result_sorted
+
 @app.route('/')
 @app.route('/home/')
 def home():
-    return render_template('home.html', articles=Article.query.all())
+    articles = get_all_articles()
+    return render_template('home.html', articles=articles)
 
 @app.route('/register/', methods=['GET','POST'])
 def register():
