@@ -57,16 +57,10 @@ def logout():
     flash('You have been successfully logged out!', category='success')
     return redirect(url_for('home'))
 
-def get_user_tickers():
-    t = iter(current_user.tickers)
-    tickers = zip(t, t, t)
-    return tickers
-
 @app.route('/account/', methods=['GET','POST'])
 def account():
     image_file = url_for('static', filename=f'profile_pics/{current_user.image_file}')
     form = AddTicker()
-    user_tickers = get_user_tickers()
     if 'ticker_id' in request.form.keys():
         ticker = request.form.get('ticker_id')
         to_delete = Ticker.query.filter_by(ticker_id=ticker).first()
@@ -80,7 +74,7 @@ def account():
         db.session.commit()
         flash('Ticker successfully added to your watchlist!', category='success')
         return redirect(url_for('account'))
-    return render_template('account.html', title='Account', image_file=image_file, form=form, user_tickers=user_tickers)
+    return render_template('account.html', title='Account', image_file=image_file, form=form)
 
 def save_photo(form_photo):
     random_hex = secrets.token_hex(8)
