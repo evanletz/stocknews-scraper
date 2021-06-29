@@ -52,6 +52,7 @@ class Article(db.Model):
     ticker_id = db.Column(db.String, db.ForeignKey('ticker.ticker_id'))
     title = db.Column(db.String)
     url = db.Column(db.String)
+    url_shortened = db.Column(db.String, nullable=True)
 
     def __repr__(self):
         return f'Article object <{self.article_id}>'
