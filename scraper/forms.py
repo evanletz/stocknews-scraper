@@ -72,3 +72,5 @@ class AddTicker(FlaskForm):
         db_ticker = Ticker.query.filter_by(ticker_id=ticker.data.upper()).first()
         if db_ticker is None:
             raise ValidationError('Ticker is invalid or cannot be found. Please choose a different one.')
+        elif db_ticker in current_user.tickers:
+            raise ValidationError('Ticker is already in your watchlist. Please choose a different one.')
