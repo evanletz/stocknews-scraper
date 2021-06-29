@@ -6,8 +6,7 @@
                 <div class="article-metadata">
                     <p class="mr-2">{{ article.ticker_id }}</p>
                 </div>
-                <h2><a class="article-title" href="#">{{ article.title }}</a></h2>
-                <a class="article-content" href="#">{{ article.url }}</a>
+                <h4><a class="article-title" href="{{ article.url }}">{{ article.title }}</a></h4>
             </div>
           </article>
     {% endfor %}
