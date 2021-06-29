@@ -58,13 +58,13 @@ def account():
         to_delete = Ticker.query.filter_by(ticker_id=ticker).first()
         current_user.tickers.pop(current_user.tickers.index(to_delete))
         db.session.commit()
-        flash('Ticker successfully removed from your watchlist!', category='success')
+        flash(f'{to_delete.ticker_id} successfully removed from your watchlist!', category='success')
         return redirect(url_for('account'))
     elif form.validate_on_submit():
         ticker = Ticker.query.filter_by(ticker_id=form.ticker.data.upper()).first()
         current_user.tickers.append(ticker)
         db.session.commit()
-        flash('Ticker successfully added to your watchlist!', category='success')
+        flash(f'{ticker.ticker_id} successfully added to your watchlist!', category='success')
         return redirect(url_for('account'))
     return render_template('account.html', title='Account', image_file=image_file, form=form)
 
