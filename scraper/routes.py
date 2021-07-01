@@ -11,8 +11,11 @@ from scraper.utils import get_all_articles
 @app.route('/')
 @app.route('/home/')
 def home():
-    articles = get_all_articles()
-    return render_template('home.html', articles=articles)
+    if current_user.is_authenticated:
+        articles = get_all_articles()
+        return render_template('home.html', articles=articles)
+    flash('Login to see the latest headlines for your watchlist.', category='warning')
+    return render_template('home.html')
 
 @app.route('/register/', methods=['GET','POST'])
 def register():
