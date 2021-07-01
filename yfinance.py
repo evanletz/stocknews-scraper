@@ -1,8 +1,10 @@
 import time
+from schedule import repeat, every, run_pending
 from scraper.yfinance.utils import get_user_tickers, diff_headline, to_article_obj, commit_article, get_all_contacts
 from scraper.yfinance.models import Yfinance, Bit, EmailClient
 
 
+@repeat(every(10).minutes)
 def main():
     tickers = get_user_tickers()
     print(tickers)
@@ -23,5 +25,5 @@ def main():
 
 if __name__ == '__main__':
     while True:
-        main()
-        time.sleep(600)
+        run_pending()
+        time.sleep(1)
