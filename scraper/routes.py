@@ -2,6 +2,7 @@ import os
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import login_user, logout_user, current_user, login_required
 import secrets
+import phonenumbers as pn
 from PIL import Image
 from scraper import app, db, bcrypt
 from scraper.models import User, Article, Ticker
@@ -24,7 +25,8 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         pw_hash = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(username=form.username.data, email=form.email.data, phone=form.phone.data,
+        phone = pn.parse(form.phone.data, 'US').national_number
+        user = User(username=form.username.data, email=form.email.data, phone=phone,
                     service=form.service.data, password=pw_hash)
         db.session.add(user)
         db.session.commit()
