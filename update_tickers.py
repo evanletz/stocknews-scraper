@@ -9,7 +9,7 @@ def main():
     Each day at 4 AM local, get an updated list of stock tickers via web scraping.
     Update the tickers from the Ticker table in the database as needed.
     '''
-    tickers = get_all_tickers()()
+    tickers = get_all_tickers()
     delete, add = compare_tickers_table(tickers)
     update_tickers_table(delete, add)
 
