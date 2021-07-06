@@ -14,6 +14,9 @@ from scraper.utils import get_all_articles
 def home():
     if current_user.is_authenticated:
         articles = get_all_articles()
+        if not articles:
+            flash('Add tickers to your watchlist on the Account page \
+                to start getting alerts for the latest headlines.', category='warning')
         return render_template('home.html', articles=articles)
     flash('Login to see the latest headlines for your watchlist.', category='warning')
     return render_template('home.html')
