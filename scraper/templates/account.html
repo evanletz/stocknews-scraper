@@ -35,18 +35,21 @@
             </fieldset>
         </form>
     </div>
-    <div class="container-fluid">
-        <div class="row">
-            {% for row in current_user.tickers %}
-                <div class="card col-sm-4">
-                    <form class="card-body" method="POST" action="" enctype="multipart/form-data">
-                        <h5 class="card-title">{{ row.ticker_id }}</h5>
-                        <input type="hidden" name="ticker_id" value="{{ row.ticker_id }}">
-                        <p class="card-text">{{ row.company_name }}</p>
-                        <button type="submit" class="btn btn-danger">Remove</button>
-                    </form>
-                </div>
-            {% endfor %}
+    <div class="content-section">
+        <legend class="border-bottom mb-4">Watchlist</legend>
+        <div class="container-fluid">
+            <div class="row">
+                {% for row in current_user.tickers %}
+                    <div class="card col-sm-4">
+                        <form class="card-body" method="POST" action="" enctype="multipart/form-data">
+                            <h5 class="card-title">{{ row.ticker_id }}</h5>
+                            <input type="hidden" name="ticker_id" value="{{ row.ticker_id }}">
+                            <p class="card-text">{{ row.company_name }}</p>
+                            <button type="submit" class="btn btn-danger">Remove</button>
+                        </form>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
 {% endblock content %}
