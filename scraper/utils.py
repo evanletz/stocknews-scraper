@@ -53,6 +53,7 @@ def update_tickers_table(to_delete, to_add):
         db.session.add(ticker)
     db.session.commit()
 
+# NO LONGER IN USE
 def get_all_articles():
     '''
     Get all articles found for the current user's watchlist.
@@ -64,6 +65,7 @@ def get_all_articles():
     result_sorted = sorted(result, key=lambda x: x.article_id, reverse=True)
     return result_sorted
 
+# NO LONGER IN USE
 def create_paginate_obj(items, page, per_page=3):
     '''
     Manually create a Pagination object given a list of items.
