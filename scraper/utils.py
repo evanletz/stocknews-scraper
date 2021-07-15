@@ -76,6 +76,18 @@ def create_paginate_obj(items, page, per_page=3):
     paginate_obj = Pagination(None, page, per_page, len(items), items)
     return paginate_obj
 
+def send_reset_email(user):
+    token = user.get_reset_token()
+    msg = Message('Password Reset Request',
+                  sender=app.config['MAIL_USERNAME'],
+                  recipients=[user.email])
+    msg.body = f'''To reset your password, visit the following link:
+{url_for('reset_token', token=token, _external=True)}
+    
+If you did not make this request, please ignore this email.
+    '''
+    mail.send(msg)
+
     
 if __name__ == '__main__':
     pass
