@@ -2,6 +2,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 from flask_login import current_user
+from flask_sqlalchemy import Pagination
 from scraper import db
 from scraper.models import Ticker
 
@@ -62,6 +63,16 @@ def get_all_articles():
             result.append(article)
     result_sorted = sorted(result, key=lambda x: x.article_id, reverse=True)
     return result_sorted
+
+def create_paginate_obj(items, page, per_page=3):
+    '''
+    Manually create a Pagination object given a list of items.
+    '''
+    start = (page - 1) * per_page
+    end = start + per_page
+    items = items[start:end]
+    paginate_obj = Pagination(None, page, per_page, len(items), items)
+    return paginate_obj
 
     
 if __name__ == '__main__':

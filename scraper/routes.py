@@ -7,17 +7,20 @@ from PIL import Image
 from scraper import app, db, bcrypt
 from scraper.models import User, Article, Ticker
 from scraper.forms import RegistrationForm, LoginForm, UpdateAccountForm, AddTicker
-from scraper.utils import get_all_articles
+from scraper.utils import get_all_articles, create_paginate_obj
+
 
 @app.route('/')
 @app.route('/home/')
 def home():
     if current_user.is_authenticated:
+        page = request.args.get('page', 1, type=int)
         articles = get_all_articles()
         if not articles:
             flash('Add tickers to your watchlist on the Account page \
                 to start getting alerts for the latest headlines.', category='warning')
-        return render_template('home.html', articles=articles)
+        paginate_obj = create_paginate_obj(articles, page)
+        return render_template('home.html', articles=paginate_obj)
     flash('Login to see the latest headlines for your watchlist.', category='warning')
     return render_template('home.html')
 
