@@ -76,3 +76,19 @@ class AddTicker(FlaskForm):
             raise ValidationError('Ticker is invalid or cannot be found. Please choose a different one.')
         elif db_ticker in current_user.tickers:
             raise ValidationError('Ticker is already in your watchlist. Please choose a different one.')
+
+class RequestReset(FlaskForm):
+
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Request Password Reset')
+
+    def validate_email(self, email):
+        user = User.query.filter_by(email=email.data).first()
+        if not user:
+            raise ValidationError('No account found with that email. Create an account first.')
+
+class ResetPassword(FlaskForm):
+
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Reset Password')
