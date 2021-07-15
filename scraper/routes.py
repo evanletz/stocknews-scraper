@@ -1,12 +1,14 @@
 import os
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import login_user, logout_user, current_user, login_required
+from flask_mail import Message
 import secrets
 import phonenumbers as pn
 from PIL import Image
-from scraper import app, db, bcrypt
+from scraper import app, db, bcrypt, mail
 from scraper.models import User, Article, Ticker
-from scraper.forms import RegistrationForm, LoginForm, UpdateAccountForm, AddTicker
+from scraper.forms import RegistrationForm, LoginForm, UpdateAccountForm, AddTicker, RequestReset, ResetPassword
+from scraper.utils import send_reset_email
 
 
 @app.route('/')
@@ -113,3 +115,32 @@ def update_account():
         form.photo.data = current_user.image_file
     image_file = url_for('static', filename=f'profile_pics/{current_user.image_file}')
     return render_template('update_account.html', title='Update Account', image_file=image_file, form=form)
+
+@app.route('/account/reset_password/', methods=['GET','POST'])
+def request_reset():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form = RequestReset()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        send_reset_email(user)
+        flash('An email has been sent with instructions to reset your password.', category='success')
+        redirect(url_for('login'))
+    return render_template('request_reset.html', title='Reset Password', form=form)
+
+@app.route('/account/reset_password/<token>', methods=['GET','POST'])
+def reset_token(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    user = User.verify_reset_token(token)
+    if not user:
+        flash('Invalid or expired token.', category='warning')
+        return redirect(url_for('request_reset'))
+    form = ResetPassword()
+    if form.validate_on_submit():
+        pw_hash = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user.password = pw_hash
+        db.session.commit()
+        flash(f'Password successfully updated! You may now log in.', category='success')
+        return redirect(url_for('login'))
+    return render_template('reset_token.html', title='Reset Password', form=form)
