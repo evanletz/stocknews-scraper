@@ -15,7 +15,7 @@ def home():
     if current_user.is_authenticated:
         page = request.args.get('page', 1, type=int)
         articles = Article.query.filter(Article.ticker_id.in_([t.ticker_id for t in current_user.tickers]))\
-            .paginate(page=page, per_page=10)
+            .order_by(Article.article_id.desc()).paginate(page=page, per_page=10)
         if articles.total == 0:
             flash('Add tickers to your watchlist on the Account page \
                 to start getting alerts for the latest headlines.', category='warning')
