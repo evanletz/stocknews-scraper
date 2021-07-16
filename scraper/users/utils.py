@@ -6,6 +6,9 @@ from scraper import app, mail
 
 
 def save_photo(form_photo):
+    '''
+    Process the new user profile picture.
+    '''
     random_hex = secrets.token_hex(8)
     _, file_ext = os.path.splitext(form_photo.filename)
     filename = random_hex + file_ext
@@ -17,6 +20,9 @@ def save_photo(form_photo):
     return filename
 
 def send_reset_email(user):
+    '''
+    Construct and send the password reset email to the user.
+    '''
     token = user.get_reset_token()
     msg = Message('Password Reset Request',
                   sender=app.config['MAIL_USERNAME'],
