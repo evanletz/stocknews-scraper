@@ -45,7 +45,7 @@ def get_all_contacts(ticker):
     '''
     Get all phone numbers of users watching the given ticker.
     '''
-    contacts = [user.phone for user in ticker.users]
+    contacts = [f'{user.phone}@{user.service}' for user in ticker.users]
     return contacts
 
 
