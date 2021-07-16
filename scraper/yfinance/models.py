@@ -39,9 +39,25 @@ class EmailClient:
     def logout(self):
         self.server.close()
 
+    @staticmethod
+    def _format_msg_len(msg):
+        rem_chars = 160 - len(msg)
+        result = msg + ' '*rem_chars
+        assert len(result) == 160
+        return result
+        '\u2019'
+
+    @staticmethod
+    def _format_msg_enc(msg):
+        msg = msg.replace('\u2019', "'")
+        return msg
+
     def send_text(self, to, article):
         ticker, title, url = article.ticker_id, article.title, article.url_shortened
         msg = f"({ticker}) {title} - <{url}>"
+        if len(msg) < 160:
+            msg = self._format_msg_len(msg)
+        msg = self._format_msg_enc(msg)
         print(msg)
         self.server.send(to, subject=None, contents=msg)
 
