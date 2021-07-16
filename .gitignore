@@ -136,3 +136,11 @@ profile_pics/
 
 # Hidden Files
 .DS_Store
+
+# Images
+.jpeg
+.jpg
+.png
+.tif
+.gif
+.eps
