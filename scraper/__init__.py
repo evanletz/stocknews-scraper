@@ -27,7 +27,9 @@ def create_app(config=Config):
 
     from scraper.main.routes import main
     from scraper.users.routes import users
+    from scraper.errors.handlers import errors
     app.register_blueprint(main)
     app.register_blueprint(users)
+    app.register_blueprint(errors)
 
     return app
