@@ -13,7 +13,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
-login_manager.login_view = 'login' # 'login' -> function name of the route
+login_manager.login_view = 'users.login' # 'login' -> function name of the route
 login_manager.login_message_category = 'info'
 app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
 app.config['MAIL_PORT'] = 587
@@ -22,4 +22,8 @@ app.config['MAIL_USERNAME'] = os.getenv('FROM')
 app.config['MAIL_PASSWORD'] = os.getenv('PASS')
 mail = Mail(app)
 
-from scraper import routes
+from scraper.main.routes import main
+from scraper.users.routes import users
+
+app.register_blueprint(main)
+app.register_blueprint(users)

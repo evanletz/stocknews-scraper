@@ -1,8 +1,6 @@
 import re
 import requests
 from bs4 import BeautifulSoup
-from flask_login import current_user
-from flask_sqlalchemy import Pagination
 from scraper import db
 from scraper.models import Ticker
 
@@ -52,43 +50,3 @@ def update_tickers_table(to_delete, to_add):
         ticker = Ticker(ticker_id=symbol, company_name=company_name)
         db.session.add(ticker)
     db.session.commit()
-
-# NO LONGER IN USE
-def get_all_articles():
-    '''
-    Get all articles found for the current user's watchlist.
-    '''
-    result = []
-    for ticker in current_user.tickers:
-        for article in ticker.articles:
-            result.append(article)
-    result_sorted = sorted(result, key=lambda x: x.article_id, reverse=True)
-    return result_sorted
-
-# NO LONGER IN USE
-def create_paginate_obj(items, page, per_page=3):
-    '''
-    Manually create a Pagination object given a list of items.
-    '''
-    start = (page - 1) * per_page
-    end = start + per_page
-    items = items[start:end]
-    paginate_obj = Pagination(None, page, per_page, len(items), items)
-    return paginate_obj
-
-def send_reset_email(user):
-    token = user.get_reset_token()
-    msg = Message('Password Reset Request',
-                  sender=app.config['MAIL_USERNAME'],
-                  recipients=[user.email])
-    msg.body = f'''To reset your password, visit the following link:
-{url_for('reset_token', token=token, _external=True)}
-    
-If you did not make this request, please ignore this email.
-    '''
-    mail.send(msg)
-
-    
-if __name__ == '__main__':
-    pass
-    

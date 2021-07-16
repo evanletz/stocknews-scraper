@@ -6,7 +6,7 @@
             <div class="media-body">
                 <h2 class="account-heading">{{ current_user.username }}</h2>
                 <p class="text-secondary">{{ current_user.email }}</p>
-                <a type="button" class="btn btn-outline-info" href="{{ url_for('account') }}">< Back</a>
+                <a type="button" class="btn btn-outline-info" href="{{ url_for('users.account') }}">< Back</a>
             </div>
         </div>
         <form method='POST' action='' enctype='multipart/form-data'>
