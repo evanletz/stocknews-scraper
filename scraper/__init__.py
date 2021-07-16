@@ -1,29 +1,33 @@
-import os
-from dotenv import load_dotenv
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_mail import Mail
+from scraper.config import Config
 
-load_dotenv()
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'd1e86a02a9c8e6e2303326acbe4d5b8d'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-db = SQLAlchemy(app)
-bcrypt = Bcrypt(app)
-login_manager = LoginManager(app)
+
+db = SQLAlchemy()
+bcrypt = Bcrypt()
+login_manager = LoginManager()
 login_manager.login_view = 'users.login' # 'login' -> function name of the route
 login_manager.login_message_category = 'info'
-app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = os.getenv('FROM')
-app.config['MAIL_PASSWORD'] = os.getenv('PASS')
-mail = Mail(app)
+mail = Mail()
 
-from scraper.main.routes import main
-from scraper.users.routes import users
+def create_app(config=Config):
+    '''
+    Create an application template.
+    '''
+    app = Flask(__name__)
+    app.config.from_object(Config)
 
-app.register_blueprint(main)
-app.register_blueprint(users)
+    db.init_app(app)
+    bcrypt.init_app(app)
+    login_manager.init_app(app)
+    mail.init_app(app)
+
+    from scraper.main.routes import main
+    from scraper.users.routes import users
+    app.register_blueprint(main)
+    app.register_blueprint(users)
+
+    return app

@@ -1,9 +1,9 @@
 import os
 import phonenumbers as pn
-from flask import Blueprint
+from flask import Blueprint, current_app
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import login_user, logout_user, current_user, login_required
-from scraper import app, db, bcrypt, mail
+from scraper import db, bcrypt, mail
 from scraper.models import User, Ticker
 from scraper.users.forms import RegistrationForm, LoginForm, UpdateAccountForm, RequestReset, ResetPassword
 from scraper.tickers.forms import AddTicker
@@ -74,7 +74,7 @@ def update_account():
     form = UpdateAccountForm()
     if form.validate_on_submit():
         if form.photo.data:
-            old_photo = os.path.join(app.root_path, 'static', 'profile_pics', current_user.image_file)
+            old_photo = os.path.join(current_app.root_path, 'static', 'profile_pics', current_user.image_file)
             new_photo = save_photo(form.photo.data)
             current_user.image_file = new_photo
             os.remove(old_photo)

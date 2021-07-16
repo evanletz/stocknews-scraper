@@ -1,8 +1,9 @@
 from datetime import datetime
+from flask import current_app
 from flask_login import UserMixin
 from sqlalchemy.sql import func
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-from scraper import db, login_manager, app
+from scraper import db, login_manager
 
 
 user_ticker = db.Table(
@@ -36,12 +37,12 @@ class User(db.Model, UserMixin):
         return self.user_id
 
     def get_reset_token(self, expires_in=1800):
-        s = Serializer(app.config['SECRET_KEY'], expires_in)
+        s = Serializer(current_app.config['SECRET_KEY'], expires_in)
         return s.dumps({'user_id': self.get_id()}).decode('utf-8')
 
     @staticmethod
     def verify_reset_token(token):
-        s = Serializer(app.config['SECRET_KEY'])
+        s = Serializer(current_app.config['SECRET_KEY'])
         try:
             user_id = s.loads(token)['user_id']
         except:
