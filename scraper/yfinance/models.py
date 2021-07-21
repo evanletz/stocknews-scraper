@@ -45,7 +45,6 @@ class EmailClient:
         result = msg + ' '*rem_chars
         assert len(result) == 160
         return result
-        '\u2019'
 
     @staticmethod
     def _format_msg_enc(msg):
@@ -58,7 +57,6 @@ class EmailClient:
         if len(msg) < 160:
             msg = self._format_msg_len(msg)
         msg = self._format_msg_enc(msg)
-        print(msg)
         self.server.send(to, subject=None, contents=msg)
 
 class Bit:
