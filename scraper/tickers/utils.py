@@ -1,6 +1,7 @@
 import re
 import requests
 from bs4 import BeautifulSoup
+from flask_login import current_user
 from scraper import db
 from scraper.models import Ticker
 
@@ -50,3 +51,8 @@ def update_tickers_table(to_delete, to_add):
         ticker = Ticker(ticker_id=symbol, company_name=company_name)
         db.session.add(ticker)
     db.session.commit()
+
+def get_choices():
+    choices = [(t.ticker_id, t.ticker_id) for t in current_user.tickers]
+    choices.insert(0, ('All', 'All'))
+    return choices
