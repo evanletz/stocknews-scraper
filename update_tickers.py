@@ -1,6 +1,6 @@
 import time
 from schedule import repeat, every, run_pending
-from scraper.utils import get_all_tickers, compare_tickers_table, update_tickers_table
+from scraper.tickers.utils import get_all_tickers, compare_tickers_table, update_tickers_table
 
 
 @repeat(every().day.at('04:00:00'))
