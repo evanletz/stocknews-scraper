@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_login import current_user
-from wtforms import StringField, SubmitField
+from wtforms import StringField, SelectField, SubmitField
 from wtforms.validators import DataRequired, Length, ValidationError
 from scraper.models import Ticker
 
@@ -16,3 +16,8 @@ class AddTicker(FlaskForm):
             raise ValidationError('Ticker is invalid or cannot be found. Please choose a different one.')
         elif db_ticker in current_user.tickers:
             raise ValidationError('Ticker is already in your watchlist. Please choose a different one.')
+
+class TickerFilter(FlaskForm):
+    
+    tickers = SelectField('Dropdown')
+    submit = SubmitField('Filter')
