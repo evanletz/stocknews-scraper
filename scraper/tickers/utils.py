@@ -53,6 +53,6 @@ def update_tickers_table(to_delete, to_add):
     db.session.commit()
 
 def get_choices():
-    choices = [(t.ticker_id, t.ticker_id) for t in current_user.tickers]
-    choices.insert(0, ('All', 'All'))
+    choices = [(t.ticker_id) for t in current_user.tickers]
+    choices.insert(0, ('All'))
     return choices
