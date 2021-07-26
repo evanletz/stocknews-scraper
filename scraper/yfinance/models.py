@@ -2,9 +2,11 @@ import os
 import requests
 import datetime
 from bs4 import BeautifulSoup
-import yagmail as yag
 import bitlyshortener
 from dotenv import load_dotenv
+from flask import current_app
+from flask_mail import Message
+from scraper import mail
 load_dotenv()
 
 
@@ -32,13 +34,6 @@ class Yfinance:
 
 class EmailClient:
 
-    def __init__(self):
-        from_address = os.getenv('FROM')
-        self.server = yag.SMTP(from_address, os.getenv('PASS'))
-
-    def logout(self):
-        self.server.close()
-
     @staticmethod
     def _format_msg_len(msg):
         rem_chars = 160 - len(msg)
@@ -53,11 +48,15 @@ class EmailClient:
 
     def send_text(self, to, article):
         ticker, title, url = article.ticker_id, article.title, article.url_shortened
-        msg = f"({ticker}) {title} - <{url}>"
-        if len(msg) < 160:
-            msg = self._format_msg_len(msg)
-        msg = self._format_msg_enc(msg)
-        self.server.send(to, subject=None, contents=msg)
+        body = f"({ticker}) {title} - <{url}>"
+        if len(body) < 160:
+            body = self._format_msg_len(body)
+        body = self._format_msg_enc(body)
+        msg = Message(None,
+                      sender=current_app.config['MAIL_USERNAME'],
+                      recipients=[to])
+        msg.body = body
+        mail.send(msg)
 
 class Bit:
 

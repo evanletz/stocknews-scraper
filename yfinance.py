@@ -20,7 +20,6 @@ def main():
             mail = EmailClient()
             for contact in contacts:
                 mail.send_text(contact, article_obj)
-            mail.logout()
 
 
 if __name__ == '__main__':
