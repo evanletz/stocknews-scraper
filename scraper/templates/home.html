@@ -4,8 +4,9 @@
         {% for article in articles.items %}
             <article class="media content-section">
                 <div class="media-body">
-                    <div class="article-metadata">
-                        <p class="mr-2">{{ article.ticker_id }}</p>
+                    <div class="row article-metadata">
+                        <p class="col-sm-6">{{ article.ticker_id }}</p>
+                        <p class="col-sm-6 text-right text-muted">{{ article.datetime_found.strftime('%a %b %d, %Y') }}</p>
                     </div>
                     <h4><a class="article-title" href="{{ article.url }}">{{ article.title }}</a></h4>
                 </div>
