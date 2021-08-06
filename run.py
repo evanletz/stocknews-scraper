@@ -8,8 +8,8 @@ from yfinance import yf
 app = create_app()
 
 sched = BackgroundScheduler(daemon=True)
-sched.add_job(lambda: ut(app), 'cron', hour=20, minute=17)
-sched.add_job(lambda: yf(app), 'interval', seconds=10)
+sched.add_job(lambda: ut(app), 'cron', hour=4)
+sched.add_job(lambda: yf(app), 'interval', seconds=300)
 sched.start()
 
 @atexit.register
