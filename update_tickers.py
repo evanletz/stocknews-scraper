@@ -5,7 +5,7 @@ from scraper.tickers.utils import get_all_tickers, compare_tickers_table, update
 
 def ut(app):
     '''
-    Each day at 4 AM local, get an updated list of stock tickers via web scraping.
+    Get an updated list of stock tickers via web scraping.
     Update the tickers from the Ticker table in the database as needed.
     '''
     with app.app_context():
