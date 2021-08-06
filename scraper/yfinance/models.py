@@ -36,10 +36,10 @@ class EmailClient:
 
     @staticmethod
     def _format_msg_len(msg):
-        rem_chars = 160 - len(msg)
-        result = msg + ' '*rem_chars
-        assert len(result) == 160
-        return result
+        if len(msg) > 111:
+            msg = msg[:107] + '...'
+            assert len(msg) <= 111
+        return msg
 
     @staticmethod
     def _format_msg_enc(msg):
@@ -48,9 +48,9 @@ class EmailClient:
 
     def send_text(self, to, article):
         ticker, title, url = article.ticker_id, article.title, article.url_shortened
-        body = f"({ticker}) {title} - <{url}>"
-        if len(body) < 160:
-            body = self._format_msg_len(body)
+        ticker_title = f'({ticker}) {title}'
+        ticker_title = self._format_msg_len(ticker_title)
+        body = f"{ticker_title} - <{url}>"
         body = self._format_msg_enc(body)
         msg = Message(None,
                       sender=current_app.config['MAIL_USERNAME'],
