@@ -19,7 +19,8 @@ def diff_headline(url, ticker):
     Compare the given headline with the latest headline
     in the database.
     '''
-    db_headline = Article.query.filter_by(ticker_id=ticker.ticker_id).first()
+    db_headline = Article.query.filter_by(ticker_id=ticker.ticker_id)\
+        .order_by(Article.article_id.desc()).first()
     return db_headline is None or url != db_headline.url
 
 def to_article_obj(info):
