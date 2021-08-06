@@ -14,16 +14,16 @@ def yf(app):
             response = yf.request_page(ticker)
             article_info = yf.parse_html(response, ticker)
             if diff_headline(article_info['url'], ticker):
-                print(f'{article_info['ticker']}: {article_info['title']}')
+                print(f'\t{article_info['ticker']}: {article_info['title']}')
                 article_info['url_shortened'] = Bit().shorten(article_info['url'])
                 article_obj = to_article_obj(article_info)
                 commit_article(article_obj)
                 contacts = get_all_contacts(ticker)
-                print(f'Sending messages to {len(contacts)} users')
+                print(f'\tSending messages to {len(contacts)} users')
                 mail = EmailClient()
                 for contact in contacts:
                     mail.send_text(contact, article_obj)
-                print('Sent!')
+                print('\tSent!')
         print('Finished YF')
 
 
