@@ -1,5 +1,4 @@
 import time
-from schedule import repeat, every, run_pending
 from scraper.yfinance.utils import get_user_tickers, diff_headline, to_article_obj, commit_article, get_all_contacts
 from scraper.yfinance.models import Yfinance, Bit, EmailClient
 

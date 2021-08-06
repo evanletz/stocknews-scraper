@@ -1,5 +1,4 @@
 import time
-from schedule import repeat, every, run_pending
 from scraper.tickers.utils import get_all_tickers, compare_tickers_table, update_tickers_table
 
 
