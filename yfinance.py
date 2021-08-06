@@ -10,14 +10,14 @@ def yf(app):
         print(f'\tTickers: {tickers}')
         yf = Yfinance()
         for ticker in tickers:
-            print(f'\tRequesting page for {ticker}')
+            print(f'\tRequesting page for {ticker.ticker_id}')
             response = yf.request_page(ticker)
             if response.status_code != 200:
                 print(f'\t{response.status_code} response status')
                 continue
             article_info = yf.parse_html(response, ticker)
             if diff_headline(article_info['url'], ticker):
-                print(f'\t{article_info['ticker']}: {article_info['title']}')
+                print(f'\t{article_info["ticker"]}: {article_info["title"]}')
                 article_info['url_shortened'] = Bit().shorten(article_info['url'])
                 article_obj = to_article_obj(article_info)
                 commit_article(article_obj)
