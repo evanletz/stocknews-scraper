@@ -1,26 +1,45 @@
 import re
+import os
 import requests
 from bs4 import BeautifulSoup
 from flask_login import current_user
 from scraper import db
 from scraper.models import Ticker
+from dotenv import load_dotenv
+load_dotenv()
 
 
-def get_all_tickers():
+def get_content():
     '''
-    Get an updated list of all valid stock symbols on the market.
+    Retrieve the HTML content from each page of the target website until
+    we get a bad response status code.
     '''
-    result = []
-    url = 'https://stockanalysis.com/stocks/'
-    response = requests.get(url)
+    page = 1
+    headers = {'User-Agent': os.getenv('USER_AGENT')}
+    content = []
+    while True:
+        url = f'https://swingtradebot.com/equities?page={page}'
+        res = requests.get(url, headers=headers)
+        if res.status_code != 200:
+            break
+        content.append(res)
+        page += 1
+    return content
 
-    soup = BeautifulSoup(response.content, 'html.parser')
-    links = soup.find_all('a', attrs={'href': re.compile(r'https://stockanalysis.com/stocks/\w')})
-    for link in links:
-        match = re.search(r'>(.*) - (.*)<', str(link))
-        symbol, company_name = match.group(1), match.group(2)
-        result.append((symbol, company_name))
-    return result
+def parse_content(content):
+    '''
+    Parse each page of HTML content to get a clean list of
+    tickers and company names.
+    '''
+    tickers = []
+    for res in content:
+        soup = BeautifulSoup(res.content, 'html.parser')
+        rows = soup.find_all('a', attrs={'href': re.compile(r'/equities/'), 'class': '', 'title': not ''})
+        rows_trunc = rows[::2]
+        for row in rows_trunc:
+            ticker, name = row.text.strip(), row['title'].strip()
+            tickers.append((ticker, name))
+    return tickers
 
 def compare_tickers_table(ticker_list):
     '''

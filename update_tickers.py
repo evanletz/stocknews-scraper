@@ -1,5 +1,5 @@
 import time
-from scraper.tickers.utils import get_all_tickers, compare_tickers_table, update_tickers_table
+from scraper.tickers.utils import get_content, parse_content, compare_tickers_table, update_tickers_table
 
 
 def ut(app):
@@ -9,7 +9,10 @@ def ut(app):
     '''
     with app.app_context():
         print('Starting UT')
-        tickers = get_all_tickers()
+        print('\tRequesting HTML content')
+        html = get_content()
+        print('\tParsing HTML content')
+        tickers = parse_content(html)
         delete, add = compare_tickers_table(tickers)
         print(f'\tDeleting {len(delete)} and adding {len(add)} tickers')
         update_tickers_table(delete, add)
