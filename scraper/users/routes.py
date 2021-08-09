@@ -77,7 +77,8 @@ def update_account():
             old_photo = os.path.join(current_app.root_path, 'static', 'profile_pics', current_user.image_file)
             new_photo = save_photo(form.photo.data)
             current_user.image_file = new_photo
-            os.remove(old_photo)
+            if os.path.basename(old_photo) != 'default.jpeg':
+                os.remove(old_photo)
         current_user.username = form.username.data
         current_user.email = form.email.data
         current_user.phone = form.phone.data
