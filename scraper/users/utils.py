@@ -1,7 +1,7 @@
 import os
 import secrets
 from PIL import Image
-from flask import current_app
+from flask import current_app, url_for
 from flask_mail import Message
 from scraper import mail
 
